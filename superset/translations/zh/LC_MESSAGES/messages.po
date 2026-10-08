@@ -99,9 +99,8 @@ msgstr ""
 msgid " expression which needs to adhere to the "
 msgstr " 表达式必须基于 "
 
-#, fuzzy
 msgid " for details."
-msgstr "详细信息"
+msgstr "。"
 
 #, python-format
 msgid " near '%(highlight)s'"
@@ -163,11 +162,11 @@ msgstr "不等于（!=）"
 
 #, python-format
 msgid "\"%s\" is now the system dark theme"
-msgstr ""
+msgstr "“%s”已设为系统默认暗色主题"
 
 #, python-format
 msgid "\"%s\" is now the system default theme"
-msgstr ""
+msgstr "“%s”已设为系统默认亮色主题"
 
 #, no-python-format
 msgid "% calculation"
@@ -372,7 +371,7 @@ msgid "+ %s more"
 msgstr ""
 
 msgid ", then paste the JSON below. See our"
-msgstr ""
+msgstr "设计主题，然后将 JSON 粘贴到下方。详情请参阅我们的"
 
 msgid ""
 "-- Note: Unless you save your query, these tabs will NOT persist if you "
@@ -1049,9 +1048,8 @@ msgstr "给图表添加名称"
 msgid "Add the name of the dashboard"
 msgstr "给看板添加名称"
 
-#, fuzzy
 msgid "Add theme"
-msgstr "增加条件"
+msgstr "添加主题"
 
 msgid "Add to dashboard"
 msgstr "添加到看板"
@@ -1465,9 +1463,8 @@ msgstr "抓取出错：%ss: %s"
 msgid "An error occurred while fetching available CSS templates"
 msgstr "获取可用的CSS模板时出错"
 
-#, fuzzy
 msgid "An error occurred while fetching available themes"
-msgstr "获取可用的CSS模板时出错"
+msgstr "获取可用主题时出错"
 
 #, python-format
 msgid "An error occurred while fetching chart owners values: %s"
@@ -1533,9 +1530,9 @@ msgid ""
 "administrator."
 msgstr "获取表格元数据时发生错误。请与管理员联系。"
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while fetching theme datasource values: %s"
-msgstr "获取数据集数据源信息时出错： %s"
+msgstr "获取主题筛选项时出错：%s"
 
 #, fuzzy
 msgid "An error occurred while fetching usage data"
@@ -1733,7 +1730,7 @@ msgid "Annotations could not be deleted."
 msgstr "无法删除注释。"
 
 msgid "Ant Design Theme Editor"
-msgstr ""
+msgstr "Ant Design 主题编辑器"
 
 msgid "Any"
 msgstr "所有"
@@ -1749,10 +1746,10 @@ msgstr "此处选择的任何调色板都将覆盖应用于此看板的各个图
 msgid ""
 "Any dashboards using these themes will be automatically dissociated from "
 "them."
-msgstr ""
+msgstr "使用这些主题的看板将自动解除与这些主题的关联。"
 
 msgid "Any dashboards using this theme will be automatically dissociated from it."
-msgstr ""
+msgstr "使用此主题的看板将自动解除与此主题的关联。"
 
 msgid "Any databases that allow connections via SQL Alchemy URIs can be added. "
 msgstr "可以添加任何允许通过SQL AlChemy URI进行连接的数据库。"
@@ -1874,9 +1871,8 @@ msgstr "确实要删除选定的 %s 吗？"
 msgid "Are you sure you want to delete the selected templates?"
 msgstr "确实要删除选定的模板吗？"
 
-#, fuzzy
 msgid "Are you sure you want to delete the selected themes?"
-msgstr "确实要删除选定的模板吗？"
+msgstr "确定要删除所选主题吗？"
 
 #, fuzzy
 msgid "Are you sure you want to delete the selected users?"
@@ -1892,12 +1888,12 @@ msgstr "您确定要继续执行吗？"
 msgid ""
 "Are you sure you want to remove the system dark theme? The application "
 "will fall back to the configuration file dark theme."
-msgstr ""
+msgstr "确定要取消系统默认暗色主题吗？应用将使用配置文件中的暗色主题。"
 
 msgid ""
 "Are you sure you want to remove the system default theme? The application"
 " will fall back to the configuration file default."
-msgstr ""
+msgstr "确定要取消系统默认亮色主题吗？应用将使用配置文件中的默认主题。"
 
 msgid "Are you sure you want to save and apply changes?"
 msgstr "确实要保存并应用更改吗？"
@@ -1906,13 +1902,13 @@ msgstr "确实要保存并应用更改吗？"
 msgid ""
 "Are you sure you want to set \"%s\" as the system dark theme? This will "
 "apply to all users who haven't set a personal preference."
-msgstr ""
+msgstr "确定要将“%s”设为系统默认暗色主题吗？此设置将应用于所有未设置个人偏好的用户。"
 
 #, python-format
 msgid ""
 "Are you sure you want to set \"%s\" as the system default theme? This "
 "will apply to all users who haven't set a personal preference."
-msgstr ""
+msgstr "确定要将“%s”设为系统默认亮色主题吗？此设置将应用于所有未设置个人偏好的用户。"
 
 #, fuzzy
 msgid "Area"
@@ -2482,15 +2478,14 @@ msgstr "无法访问查询"
 msgid "Cannot delete a database that has datasets attached"
 msgstr "无法删除附加了数据集的数据库"
 
-#, fuzzy
 msgid "Cannot delete system themes"
-msgstr "无法访问查询"
+msgstr "无法删除系统主题"
 
 msgid "Cannot delete theme that is set as system default or dark theme"
-msgstr ""
+msgstr "无法删除已设为系统默认亮色或暗色主题的主题"
 
 msgid "Cannot delete theme that is set as system default or dark theme."
-msgstr ""
+msgstr "无法删除已设为系统默认亮色或暗色主题的主题。"
 
 #, python-format
 msgid "Cannot find the table (%s) metadata."
@@ -2503,7 +2498,7 @@ msgid "Cannot load filter"
 msgstr "无法加载筛选器"
 
 msgid "Cannot modify system themes."
-msgstr ""
+msgstr "无法修改系统主题。"
 
 msgid "Cannot nest folders in default folders"
 msgstr ""
@@ -2953,9 +2948,8 @@ msgid ""
 "color based on a categorical color palette"
 msgstr "选择按指标大小为国家填色，或按分类色板分配颜色"
 
-#, fuzzy
 msgid "Choose..."
-msgstr "选择数据库"
+msgstr "请选择…"
 
 msgid "Chord Diagram"
 msgstr "弦图"
@@ -3003,23 +2997,21 @@ msgstr "清除所有"
 msgid "Clear all filters"
 msgstr "清空所有筛选条件"
 
-#, fuzzy
 msgid "Clear default dark theme"
-msgstr "默认时间"
+msgstr "取消默认暗色主题"
 
 msgid "Clear default light theme"
-msgstr ""
+msgstr "取消默认亮色主题"
 
 #, fuzzy
 msgid "Clear form"
 msgstr "清除表单"
 
-#, fuzzy
 msgid "Clear local theme"
-msgstr "线性颜色方案"
+msgstr "清除当前会话的主题设置"
 
 msgid "Clear the selection to revert to the system default theme"
-msgstr ""
+msgstr "清除选择以恢复系统默认主题"
 
 #, fuzzy
 msgid ""
@@ -3957,7 +3949,6 @@ msgstr "允许DML"
 msgid "Daily seasonality"
 msgstr "日度季节性"
 
-#, fuzzy
 msgid "Dark"
 msgstr "暗色"
 
@@ -4402,7 +4393,6 @@ msgstr "减少"
 msgid "Decrease label"
 msgstr "减少"
 
-#, fuzzy
 msgid "Default"
 msgstr "默认"
 
@@ -4500,9 +4490,8 @@ msgstr ""
 msgid "Define the database, SQL query, and triggering conditions for alert."
 msgstr ""
 
-#, fuzzy
 msgid "Defined through system configuration."
-msgstr "错误的经纬度配置。"
+msgstr "由系统配置定义。"
 
 msgid ""
 "Defines a rolling window function to apply, works along with the "
@@ -4574,9 +4563,8 @@ msgstr "删除"
 msgid "Delete Template?"
 msgstr "删除模板？"
 
-#, fuzzy
 msgid "Delete Theme?"
-msgstr "删除模板？"
+msgstr "删除主题？"
 
 #, fuzzy
 msgid "Delete User?"
@@ -4612,9 +4600,8 @@ msgstr "删除"
 msgid "Delete template"
 msgstr "删除模板"
 
-#, fuzzy
 msgid "Delete theme"
-msgstr "删除模板"
+msgstr "删除主题"
 
 msgid "Delete this container and save to remove this message."
 msgstr "删除此容器并保存以移除此消息。"
@@ -4680,10 +4667,10 @@ msgid "Deleted %(num)d saved query"
 msgid_plural "Deleted %(num)d saved queries"
 msgstr[0] "删除 %(num)d 个保存的查询"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Deleted %(num)d theme"
 msgid_plural "Deleted %(num)d themes"
-msgstr[0] "删除 %(num)d 个数据集"
+msgstr[0] "已删除 %(num)d 个主题"
 
 #, fuzzy, python-format
 msgid "Deleted %s"
@@ -4762,9 +4749,8 @@ msgstr "在大数字下面显示描述文本"
 msgid "Deselect all"
 msgstr "取消全选"
 
-#, fuzzy
 msgid "Design with"
-msgstr "最小宽度"
+msgstr "使用"
 
 #, fuzzy
 msgid "Details"
@@ -4859,9 +4845,8 @@ msgstr "禁用"
 msgid "Disables the drill to detail feature for this database."
 msgstr "这个数据集没有返回预览数据"
 
-#, fuzzy
 msgid "Discard"
-msgstr "取消"
+msgstr "放弃修改"
 
 msgid "Display Name"
 msgstr "显示名称"
@@ -5334,9 +5319,8 @@ msgstr "编辑模板参数"
 msgid "Edit the dashboard"
 msgstr "编辑看板"
 
-#, fuzzy
 msgid "Edit theme properties"
-msgstr "编辑属性"
+msgstr "编辑主题属性"
 
 msgid "Edit time range"
 msgstr "编辑时间范围"
@@ -5628,9 +5612,8 @@ msgstr "告警名称"
 msgid "Enter the user's username"
 msgstr ""
 
-#, fuzzy
 msgid "Enter theme name"
-msgstr "告警名称"
+msgstr "输入主题名称"
 
 msgid "Enter your login and password below:"
 msgstr ""
@@ -5671,9 +5654,8 @@ msgstr "保存数据集时发生错误"
 msgid "Error fetching charts"
 msgstr "获取图表时出错"
 
-#, fuzzy
 msgid "Error importing theme."
-msgstr "错误（暗色）"
+msgstr "导入主题时出错。"
 
 #, python-format
 msgid "Error in jinja expression in RLS filters: %(msg)s"
@@ -6036,7 +6018,7 @@ msgid "Failed at retrieving results"
 msgstr "检索结果失败"
 
 msgid "Failed to apply theme: Invalid JSON"
-msgstr ""
+msgstr "应用主题失败：JSON 格式无效"
 
 msgid "Failed to create report"
 msgstr "创建报告发生错误"
@@ -6070,11 +6052,11 @@ msgstr ""
 
 #, python-format
 msgid "Failed to remove system dark theme: %s"
-msgstr ""
+msgstr "取消系统默认暗色主题失败：%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to remove system default theme: %s"
-msgstr "验证选择选项失败：%s"
+msgstr "取消系统默认亮色主题失败：%s"
 
 #, fuzzy
 msgid "Failed to retrieve advanced type"
@@ -6093,15 +6075,15 @@ msgid "Failed to save cross-filters setting"
 msgstr "保存交叉筛选作用域失败"
 
 msgid "Failed to set local theme: Invalid JSON configuration"
-msgstr ""
+msgstr "设置当前会话主题失败：JSON 配置无效"
 
 #, python-format
 msgid "Failed to set system dark theme: %s"
-msgstr ""
+msgstr "设置系统默认暗色主题失败：%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to set system default theme: %s"
-msgstr "验证选择选项失败：%s"
+msgstr "设置系统默认亮色主题失败：%s"
 
 msgid "Failed to start remote query on a worker."
 msgstr "无法启动远程查询"
@@ -6925,9 +6907,8 @@ msgstr "导入查询"
 msgid "Import saved query failed for an unknown reason."
 msgstr "由于未知原因，导入保存的查询失败。"
 
-#, fuzzy
 msgid "Import themes"
-msgstr "导入查询"
+msgstr "导入主题"
 
 #, fuzzy
 msgid "In"
@@ -7300,9 +7281,8 @@ msgstr "一月"
 msgid "JSON"
 msgstr "JSON"
 
-#, fuzzy
 msgid "JSON Configuration"
-msgstr "列配置"
+msgstr "JSON 配置"
 
 msgid "JSON Metadata"
 msgstr "JSON 元数据"
@@ -7451,9 +7431,8 @@ msgstr "标记的标签"
 msgid "Labels for the ranges"
 msgstr "范围的标签"
 
-#, fuzzy
 msgid "Languages"
-msgstr "范围"
+msgstr "语言"
 
 msgid "Large"
 msgstr "大"
@@ -7618,9 +7597,8 @@ msgstr "小于（<）"
 msgid "Lift percent precision"
 msgstr "提升百分比精度"
 
-#, fuzzy
 msgid "Light"
-msgstr "明亮"
+msgstr "亮色"
 
 msgid "Light mode"
 msgstr "明亮模式"
@@ -7715,20 +7693,18 @@ msgstr "线段编码"
 msgid "List"
 msgstr "最后一个"
 
-#, fuzzy
 msgid "List Groups"
-msgstr "数字"
+msgstr "用户组列表"
 
 msgid "List Roles"
-msgstr ""
+msgstr "角色列表"
 
 #, fuzzy
 msgid "List Unique Values"
 msgstr "列出不重复的值"
 
-#, fuzzy
 msgid "List Users"
-msgstr "数字"
+msgstr "用户列表"
 
 msgid "List of extra columns made available in JavaScript functions"
 msgstr "在JavaScript函数中可用的额外列列表"
@@ -7773,16 +7749,15 @@ msgstr "加载中..."
 msgid "Loading..."
 msgstr "加载中…"
 
-#, fuzzy
 msgid "Local"
-msgstr "对数尺度"
+msgstr "本地"
 
 msgid "Local theme set for preview"
-msgstr ""
+msgstr "已应用主题供当前会话预览"
 
 #, python-format
 msgid "Local theme set to \"%s\""
-msgstr ""
+msgstr "当前会话主题已设为“%s”"
 
 #, fuzzy
 msgid "Locate the chart"
@@ -7960,7 +7935,7 @@ msgid "Markup type"
 msgstr "Markup 类型"
 
 msgid "Match system"
-msgstr ""
+msgstr "跟随系统"
 
 msgid "Match time shift color with original series"
 msgstr "时间偏移系列使用与原系列相同的颜色"
@@ -10086,11 +10061,10 @@ msgid "Remove"
 msgstr "删除"
 
 msgid "Remove System Dark Theme"
-msgstr ""
+msgstr "取消系统默认暗色主题"
 
-#, fuzzy
 msgid "Remove System Default Theme"
-msgstr "刷新默认值"
+msgstr "取消系统默认亮色主题"
 
 #, fuzzy
 msgid "Remove cross-filter"
@@ -11024,9 +10998,8 @@ msgstr "选择将要上传文件的数据库"
 msgid "Select a tab"
 msgstr "删除数据库"
 
-#, fuzzy
 msgid "Select a theme"
-msgstr "选择方案"
+msgstr "选择主题"
 
 msgid ""
 "Select a time grain for the visualization. The grain is the time interval"
@@ -11389,19 +11362,16 @@ msgid "Service version"
 msgstr "服务帐户"
 
 msgid "Set System Dark Theme"
-msgstr ""
+msgstr "设置系统默认暗色主题"
 
-#, fuzzy
 msgid "Set System Default Theme"
-msgstr "默认时间"
+msgstr "设置系统默认亮色主题"
 
-#, fuzzy
 msgid "Set as default dark theme"
-msgstr "默认时间"
+msgstr "设为默认暗色主题"
 
-#, fuzzy
 msgid "Set as default light theme"
-msgstr "过滤器默认值"
+msgstr "设为默认亮色主题"
 
 #, fuzzy
 msgid "Set auto-refresh"
@@ -11410,12 +11380,11 @@ msgstr "设置自动刷新"
 msgid "Set filter mapping"
 msgstr "设置过滤映射"
 
-#, fuzzy
 msgid "Set local theme for testing"
-msgstr "启用预测中"
+msgstr "在当前会话中预览主题"
 
 msgid "Set local theme for testing (preview only)"
-msgstr ""
+msgstr "在当前会话中测试主题（仅供预览）"
 
 msgid "Set refresh frequency for current session only."
 msgstr ""
@@ -11794,7 +11763,7 @@ msgstr "在分隔符之后跳过空格。"
 
 #, python-format
 msgid "Skipped %d system themes that cannot be deleted"
-msgstr ""
+msgstr "已跳过 %d 个无法删除的系统主题"
 
 #, fuzzy
 msgid "Slice Id"
@@ -12316,18 +12285,17 @@ msgstr "语法"
 msgid "Syntax Error: %(qualifier)s input \"%(input)s\" expecting \"%(expected)s"
 msgstr ""
 
-#, fuzzy
 msgid "System"
-msgstr "流式"
+msgstr "系统"
 
 msgid "System Theme - Read Only"
-msgstr ""
+msgstr "系统主题（只读）"
 
 msgid "System dark theme removed"
-msgstr ""
+msgstr "已取消系统默认暗色主题"
 
 msgid "System default theme removed"
-msgstr ""
+msgstr "已取消系统默认亮色主题"
 
 msgid "TABLES"
 msgstr "表"
@@ -13341,25 +13309,20 @@ msgstr "线条的宽度"
 msgid "The width of the lines"
 msgstr "线条的宽度"
 
-#, fuzzy
 msgid "Theme"
-msgstr "时间"
+msgstr "主题"
 
-#, fuzzy
 msgid "Theme imported"
-msgstr "数据集已导入"
+msgstr "主题已导入"
 
-#, fuzzy
 msgid "Theme not found."
-msgstr "CSS模板未找到"
+msgstr "未找到主题。"
 
-#, fuzzy
 msgid "Themes"
-msgstr "时间"
+msgstr "主题"
 
-#, fuzzy
 msgid "Themes could not be deleted."
-msgstr "无法删除标签"
+msgstr "无法删除主题。"
 
 msgid "There are associated alerts or reports"
 msgstr "存在关联的警报或报告"
@@ -13520,9 +13483,9 @@ msgstr "删除所选图层时出现问题：%s"
 msgid "There was an issue deleting the selected templates: %s"
 msgstr "删除所选模板时出现问题：%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "There was an issue deleting the selected themes: %s"
-msgstr "删除所选模板时出现问题：%s"
+msgstr "删除所选主题时出错：%s"
 
 #, python-format
 msgid "There was an issue deleting: %s"
@@ -13552,9 +13515,8 @@ msgstr "删除所选看板时出现问题："
 msgid "There was an issue exporting the selected datasets"
 msgstr "删除选定的数据集时出现问题：%s"
 
-#, fuzzy, python-format
 msgid "There was an issue exporting the selected themes"
-msgstr "删除所选模板时出现问题：%s"
+msgstr "导出所选主题时出错"
 
 msgid "There was an issue favoriting this dashboard."
 msgstr "收藏看板时候出现问题。"
@@ -13621,9 +13583,8 @@ msgstr "此操作将永久删除保存的查询。"
 msgid "This action will permanently delete the template."
 msgstr "此操作将永久删除模板。"
 
-#, fuzzy
 msgid "This action will permanently delete the theme."
-msgstr "此操作将永久删除模板。"
+msgstr "此操作将永久删除该主题。"
 
 #, fuzzy
 msgid "This action will permanently delete the user registration."
@@ -13807,16 +13768,15 @@ msgstr ""
 "这是将会添加到WHERE子句的条件。例如，要仅返回特定客户端的行，可以使用子句 `client_id = 9` "
 "定义常规过滤。若要在用户不属于RLS过滤角色的情况下不显示行，可以使用子句 `1 = 0`（始终为false）创建基本过滤。"
 
-#, fuzzy
 msgid "This is the default dark theme"
-msgstr "默认时间"
+msgstr "这是默认暗色主题"
 
 #, fuzzy
 msgid "This is the default folder"
 msgstr "刷新默认值"
 
 msgid "This is the default light theme"
-msgstr ""
+msgstr "这是默认亮色主题"
 
 msgid ""
 "This json object describes the positioning of the widgets in the "
@@ -13882,10 +13842,10 @@ msgid ""
 msgstr "此表已经关联了一个数据集。一个表只能关联一个数据集。"
 
 msgid "This theme is set locally"
-msgstr ""
+msgstr "此主题已应用于当前会话"
 
 msgid "This theme is set locally for your session"
-msgstr ""
+msgstr "此主题仅应用于您的当前会话"
 
 msgid "This username is already taken. Please choose another one."
 msgstr ""
@@ -14343,7 +14303,7 @@ msgid "UI Configuration"
 msgstr "UI 配置"
 
 msgid "UI theme administration is not enabled."
-msgstr ""
+msgstr "尚未启用界面主题管理。"
 
 msgid "URL"
 msgstr "URL 地址"
@@ -14924,9 +14884,8 @@ msgstr "查看键和索引（%s）"
 msgid "View query"
 msgstr "查看查询"
 
-#, fuzzy
 msgid "View theme properties"
-msgstr "编辑属性"
+msgstr "查看主题属性"
 
 msgid "Viewed"
 msgstr "已查看"
@@ -15660,12 +15619,11 @@ msgid ""
 "want to overwrite?"
 msgstr "您正在导入一个或多个已存在的查询。覆盖可能会导致您丢失一些工作。您确定要覆盖吗？"
 
-#, fuzzy
 msgid ""
 "You are importing one or more themes that already exist. Overwriting "
 "might cause you to lose some of your work. Are you sure you want to "
 "overwrite?"
-msgstr "您正在导入一个或多个已存在的数据集。覆盖可能会导致您丢失一些工作。确定要覆盖吗？"
+msgstr "您正在导入一个或多个已存在的主题。覆盖可能导致现有修改丢失。确定要覆盖吗？"
 
 msgid ""
 "You are viewing this chart in a dashboard context with labels shared "
@@ -15788,9 +15746,8 @@ msgstr "您没有权利创建下载csv"
 msgid "You have removed this filter."
 msgstr "您已删除此过滤条件。"
 
-#, fuzzy
 msgid "You have unsaved changes"
-msgstr "您有一些未保存的修改。"
+msgstr "您有未保存的修改"
 
 msgid "You have unsaved changes."
 msgstr "您有一些未保存的修改。"
@@ -15831,7 +15788,7 @@ msgid "Your account is activated. You can log in with your credentials."
 msgstr ""
 
 msgid "Your changes will be lost if you leave without saving."
-msgstr ""
+msgstr "如果不保存就离开，您的修改将丢失。"
 
 #, fuzzy
 msgid "Your chart is not up to date"
@@ -16228,7 +16185,6 @@ msgstr "偏离"
 msgid "dialect+driver://username:password@host:port/database"
 msgstr ""
 
-#, fuzzy
 msgid "documentation"
 msgstr "文档"
 
@@ -16724,9 +16680,8 @@ msgstr "时间类型图标"
 msgid "textarea"
 msgstr "文本区域"
 
-#, fuzzy
 msgid "theme"
-msgstr "时间"
+msgstr "主题"
 
 #, fuzzy
 msgid "to"
@@ -17401,3 +17356,8 @@ msgstr "展示所选时间周期的指标值，以及与对比周期的数值差
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberPeriodOverPeriod/PopKPI.tsx:226
 msgid "previous range"
 msgstr "前一时间范围"
+
+
+#. Theme administration localization.
+msgid "Unknown tokens will be highlighted as warnings."
+msgstr "未知的主题变量将以警告高亮显示。"
