@@ -91,13 +91,10 @@ const fetchPermissionPageRaw = async (queryParams: Record<string, unknown>) => {
   };
 };
 
-const fetchAllPermissionPages = async (
-  filters: Record<string, unknown>[],
-): Promise<SelectOption[]> => {
+const fetchAllPermissionPages = async (): Promise<SelectOption[]> => {
   const page0 = await fetchPermissionPageRaw({
     page: 0,
     page_size: PAGE_SIZE,
-    filters,
   });
   if (page0.data.length === 0 || page0.data.length >= page0.totalCount) {
     return page0.data;
@@ -116,7 +113,6 @@ const fetchAllPermissionPages = async (
         fetchPermissionPageRaw({
           page: batch + i,
           page_size: PAGE_SIZE,
-          filters,
         }),
       ),
     );
@@ -146,24 +142,15 @@ export const fetchPermissionOptions = async (
   }
 
   try {
-    const cacheKey = filterValue.trim().toLowerCase();
+    const cacheKey = filterValue.trim().toLowerCase().replace(/_/g, ' ');
     let cached = permissionSearchCache.get(cacheKey);
     if (!cached) {
-      const [byViewMenu, byPermission] = await Promise.all([
-        fetchAllPermissionPages([
-          { col: 'view_menu.name', opr: 'ct', value: filterValue },
-        ]),
-        fetchAllPermissionPages([
-          { col: 'permission.name', opr: 'ct', value: filterValue },
-        ]),
-      ]);
-
-      const seen = new Set<number>();
-      cached = [...byViewMenu, ...byPermission].filter(item => {
-        if (seen.has(item.value)) return false;
-        seen.add(item.value);
-        return true;
-      });
+      // FAB's permissions API does not support filtering nested name columns.
+      // Load its paginated results and search the same labels shown in the select.
+      const permissions = await fetchAllPermissionPages();
+      cached = permissions.filter(item =>
+        item.label.toLowerCase().includes(cacheKey),
+      );
       if (permissionSearchCache.size >= MAX_CACHE_ENTRIES) {
         const oldestKey = permissionSearchCache.keys().next().value;
         if (oldestKey !== undefined) {

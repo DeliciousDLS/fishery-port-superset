@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { configure } from '@apache-superset/core/translation';
+import userEvent from '@testing-library/user-event';
 import { render, screen, waitFor } from '@superset-ui/core/spec';
 import type { ColumnsType } from 'antd/es/table';
 import { Table, TableSize } from './index';
@@ -80,4 +82,60 @@ test('renders with default props', async () => {
     expect(screen.getByText(row.columnType)).toBeInTheDocument();
     expect(screen.getByText(row.dataType)).toBeInTheDocument();
   });
+});
+
+afterEach(() => configure());
+
+test.each([
+  ['en', '50 / page', '100 / page'],
+  ['zh', '50/页', '100/页'],
+])('renders pagination size labels in %s', async (locale, current, next) => {
+  if (locale === 'zh') {
+    configure({
+      languagePack: {
+        domain: 'superset',
+        locale_data: {
+          superset: {
+            '': {
+              domain: 'superset',
+              lang: 'zh',
+              plural_forms: 'nplurals=1; plural=0;',
+            },
+            '%s / page': ['%s/页'],
+            'Page size': ['每页条数'],
+          },
+        },
+      },
+    });
+  }
+  const onChange = jest.fn();
+  render(
+    <Table
+      columns={testColumns}
+      data={testData}
+      defaultPageSize={50}
+      recordCount={150}
+      onChange={onChange}
+    />,
+  );
+  expect(screen.getByText(current)).toBeVisible();
+  await userEvent.click(screen.getByRole('combobox'));
+  await userEvent.click(
+    screen
+      .getAllByText(next)
+      .find(element => element.closest('.ant-select-item-option-content'))!,
+  );
+  await waitFor(() =>
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({ pageSize: 100 }),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    ),
+  );
+  expect(
+    screen
+      .getAllByText(next)
+      .find(element => element.closest('.ant-select-selection-item')),
+  ).toBeVisible();
 });

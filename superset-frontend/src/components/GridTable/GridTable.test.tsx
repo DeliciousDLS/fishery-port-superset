@@ -16,9 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { render } from 'spec/helpers/testing-library';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from 'spec/helpers/testing-library';
 import { setupAGGridModules } from '@superset-ui/core/components/ThemedAgGridReact';
 import { GridTable } from '.';
+import type { IRowNode } from 'ag-grid-community';
 
 const mockedProps = {
   queryId: 'abc',
@@ -63,4 +69,49 @@ test('sorts strings correctly', () => {
 
   // Original order
   expect(container).toHaveTextContent(['Bravo', 'Alpha', 'Charlie'].join(''));
+});
+
+test('renders row numbers under strict CSP and refreshes them on sort and filter', async () => {
+  const FunctionConstructor = global.Function;
+  const dynamicFunction = jest.fn(() => {
+    throw new EvalError('Content Security Policy disallows unsafe-eval');
+  });
+  global.Function = new Proxy(FunctionConstructor, {
+    apply: dynamicFunction,
+    construct: dynamicFunction,
+  });
+  try {
+    const { container, rerender } = render(
+      <GridTable {...mockedProps} showRowNumber />,
+    );
+    const rowNumbers = () =>
+      Array.from(container.querySelectorAll('.row-number-col')).map(
+        cell => cell.textContent,
+      );
+    expect(rowNumbers()).toEqual(['1', '2', '3']);
+
+    fireEvent.click(screen.getByRole('button', { name: /^b sort/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^b sort/ }));
+    const columnB = Array.from(
+      container.querySelectorAll('.ag-cell[col-id="b"]'),
+    ).map(cell => cell.textContent);
+    expect(columnB).toEqual(['b3', 'b2', 'b1']);
+    await waitFor(() => expect(rowNumbers()).toEqual(['1', '2', '3']));
+    rerender(
+      <GridTable
+        {...mockedProps}
+        showRowNumber
+        externalFilter={(node: IRowNode<(typeof mockedProps.data)[number]>) =>
+          node.data?.b !== 'b2'
+        }
+      />,
+    );
+    await waitFor(() =>
+      expect(screen.queryByText('b2')).not.toBeInTheDocument(),
+    );
+    await waitFor(() => expect(rowNumbers()).toEqual(['1', '2']));
+    expect(dynamicFunction).not.toHaveBeenCalled();
+  } finally {
+    global.Function = FunctionConstructor;
+  }
 });

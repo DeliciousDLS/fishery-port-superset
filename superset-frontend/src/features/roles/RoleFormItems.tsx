@@ -50,6 +50,11 @@ export const PermissionsField = ({
       mode="multiple"
       name="rolePermissions"
       placeholder={t('Select permissions')}
+      filterOption={(search, option) =>
+        String(option?.label ?? '')
+          .toLowerCase()
+          .includes(search.trim().toLowerCase().replace(/_/g, ' '))
+      }
       options={(filterValue, page, pageSize) =>
         fetchPermissionOptions(filterValue, page, pageSize, addDangerToast)
       }

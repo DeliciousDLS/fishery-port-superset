@@ -49,6 +49,8 @@ jest.mock('ag-grid-community', () => ({
     version: '1.0.0',
   },
   CustomFilterModule: { moduleName: 'CustomFilterModule', version: '1.0.0' },
+  RowSelectionModule: { moduleName: 'RowSelectionModule', version: '1.0.0' },
+  EventApiModule: { moduleName: 'EventApiModule', version: '1.0.0' },
 }));
 
 beforeEach(() => {

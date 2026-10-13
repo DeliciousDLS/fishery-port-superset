@@ -29,7 +29,7 @@ import { EmptyState, Loading } from '@superset-ui/core/components';
 import { getChartDataRequest } from 'src/components/Chart/chartAction';
 import { ResultsPaneProps, QueryResultInterface } from '../types';
 import { SingleQueryResultPane } from './SingleQueryResultPane';
-import { TableControls, ROW_LIMIT_OPTIONS } from './DataTableControls';
+import { TableControls, getRowLimitOptions } from './DataTableControls';
 
 const Error = styled.pre`
   margin-top: ${({ theme }) => `${theme.sizeUnit * 4}px`};
@@ -185,7 +185,7 @@ export const useResultsPane = ({
         canDownload={canDownload}
         columnDisplayNames={columnDisplayNames}
         rowLimit={rowLimit}
-        rowLimitOptions={ROW_LIMIT_OPTIONS}
+        rowLimitOptions={getRowLimitOptions()}
         onRowLimitChange={handleRowLimitChange}
       />
     </StyledDiv>

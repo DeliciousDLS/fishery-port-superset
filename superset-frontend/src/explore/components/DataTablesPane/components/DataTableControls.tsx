@@ -17,6 +17,8 @@
  * under the License.
  */
 import { styled, css } from '@apache-superset/core/theme';
+import { tn } from '@apache-superset/core/translation';
+import { getNumberFormatter } from '@superset-ui/core';
 import { GenericDataType } from '@apache-superset/core/common';
 import { useMemo } from 'react';
 import { zip } from 'lodash';
@@ -30,13 +32,11 @@ import { getTimeColumns } from 'src/explore/components/DataTableControl/utils';
 import RowCountLabel from 'src/components/RowCountLabel';
 import { TableControlsProps } from '../types';
 
-export const ROW_LIMIT_OPTIONS = [
-  { value: 100, label: '100 rows' },
-  { value: 500, label: '500 rows' },
-  { value: 1000, label: '1k rows' },
-  { value: 5000, label: '5k rows' },
-  { value: 10000, label: '10k rows' },
-];
+export const getRowLimitOptions = () =>
+  [50, 100, 500, 1000, 5000, 10000].map(value => ({
+    value,
+    label: tn('%s row', '%s rows', value, getNumberFormatter()(value)),
+  }));
 
 export const TableControlsWrapper = styled.div`
   ${({ theme }) => `

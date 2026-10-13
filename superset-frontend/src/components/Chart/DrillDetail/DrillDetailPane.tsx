@@ -88,6 +88,9 @@ export default function DrillDetailPane({
 }) {
   const theme = useTheme();
   const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
+  const currentPageSize = useRef(pageSize);
+  currentPageSize.current = pageSize;
   const lastPageIndex = useRef(pageIndex);
   const [filters, setFilters] = useState(initialFilters);
   const [isLoading, setIsLoading] = useState(false);
@@ -236,17 +239,18 @@ export default function DrillDetailPane({
     if (!responseError && !isLoading && !resultsPages.has(pageIndex)) {
       setIsLoading(true);
       const jsonPayload = getDrillPayload(formData, filters) ?? {};
-      const cachePageLimit = Math.ceil(SAMPLES_ROW_LIMIT / PAGE_SIZE);
+      const cachePageLimit = Math.ceil(SAMPLES_ROW_LIMIT / pageSize);
       getDatasourceSamples(
         datasourceType as DatasourceType,
         Number(datasourceId),
         false,
         jsonPayload,
-        PAGE_SIZE,
+        pageSize,
         pageIndex + 1,
         dashboardId,
       )
         .then(response => {
+          if (currentPageSize.current !== pageSize) return;
           setResultsPages(
             new Map([
               ...[...resultsPages.entries()].slice(-cachePageLimit + 1),
@@ -264,6 +268,7 @@ export default function DrillDetailPane({
           setResponseError('');
         })
         .catch(error => {
+          if (currentPageSize.current !== pageSize) return;
           setResponseError(`${error.name}: ${error.message}`);
         })
         .finally(() => {
@@ -278,6 +283,7 @@ export default function DrillDetailPane({
     formData,
     isLoading,
     pageIndex,
+    pageSize,
     responseError,
     resultsPages,
   ]);
@@ -313,13 +319,21 @@ export default function DrillDetailPane({
           data={data}
           columns={mappedColumns}
           size={TableSize.Small}
-          defaultPageSize={PAGE_SIZE}
+          defaultPageSize={pageSize}
           recordCount={resultsPage?.total}
           usePagination
           loading={isLoading}
-          onChange={pagination =>
-            setPageIndex(pagination.current ? pagination.current - 1 : 0)
-          }
+          onChange={pagination => {
+            const nextPageSize = pagination.pageSize ?? pageSize;
+            if (nextPageSize !== pageSize) {
+              setPageSize(nextPageSize);
+              setResultsPages(new Map());
+              setResponseError('');
+              setPageIndex(0);
+            } else {
+              setPageIndex(pagination.current ? pagination.current - 1 : 0);
+            }
+          }}
           resizable
           virtualize
           allowHTML={allowHTML}

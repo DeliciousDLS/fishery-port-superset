@@ -387,6 +387,19 @@ export function Table<RecordType extends object>(
         hideOnSinglePage: true,
         pageSize,
         pageSizeOptions,
+        locale: {
+          items_per_page: t('/ page'),
+          page_size: t('Page size'),
+          prev_page: t('Previous page'),
+          next_page: t('Next page'),
+        },
+        showSizeChanger:
+          (recordCount ?? data.length) > 50
+            ? {
+                labelRender: ({ value }) => t('%s / page', value),
+                optionRender: ({ value }) => t('%s / page', value),
+              }
+            : false,
         onShowSizeChange: (page: number, size: number) => setPageSize(size),
       }
     : false;

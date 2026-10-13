@@ -154,7 +154,8 @@ function RoleListEditModal({
 
     setLoadingRolePermissions(true);
     permissionFetchSucceeded.current = false;
-    const filters = [{ col: 'id', opr: 'in', value: stablePermissionIds }];
+    // Flask-AppBuilder exposes the role relationship filter, not an ID filter.
+    const filters = [{ col: 'role', opr: 'rel_m_m', value: id }];
 
     fetchPaginatedData({
       endpoint: `/api/v1/security/permissions-resources/`,

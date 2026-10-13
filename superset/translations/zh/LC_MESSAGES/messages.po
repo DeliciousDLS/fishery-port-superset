@@ -312,10 +312,10 @@ msgid "%s record"
 msgid_plural "%s records..."
 msgstr[0] "%s 异常"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s row"
 msgid_plural "%s rows"
-msgstr[0] "%s 行"
+msgstr[0] "%s行"
 
 #, python-format
 msgid "%s saved metric(s)"
@@ -884,9 +884,8 @@ msgid ""
 "series"
 msgstr "在提示信息中添加查询 A 和查询 B 的标识，便于区分数据系列"
 
-#, fuzzy
 msgid "Add Role"
-msgstr "排除角色"
+msgstr "新增角色"
 
 #, fuzzy
 msgid "Add Rule"
@@ -1856,9 +1855,8 @@ msgstr "确实要删除选定的图层吗？"
 msgid "Are you sure you want to delete the selected layers?"
 msgstr "确实要删除选定的图层吗？"
 
-#, fuzzy
 msgid "Are you sure you want to delete the selected roles?"
-msgstr "确实要删除选定的图层吗？"
+msgstr "确定删除所选角色吗？"
 
 #, fuzzy
 msgid "Are you sure you want to delete the selected rules?"
@@ -2675,9 +2673,9 @@ msgstr "图表"
 msgid "Chart %(id)s not found"
 msgstr "图表 %(id)s 没有找到"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Chart Data: %s"
-msgstr "上次更新 %s"
+msgstr "图表数据：%s"
 
 msgid "Chart ID"
 msgstr "图表 ID"
@@ -4556,9 +4554,8 @@ msgstr "确定删除查询？"
 msgid "Delete Report?"
 msgstr "删除报表？"
 
-#, fuzzy
 msgid "Delete Role?"
-msgstr "删除"
+msgstr "删除角色？"
 
 msgid "Delete Template?"
 msgstr "删除模板？"
@@ -4593,9 +4590,8 @@ msgstr "删除"
 msgid "Delete item"
 msgstr "删除模板"
 
-#, fuzzy
 msgid "Delete role"
-msgstr "删除"
+msgstr "删除角色"
 
 msgid "Delete template"
 msgstr "删除模板"
@@ -4684,13 +4680,13 @@ msgstr "已删除：%s"
 msgid "Deleted groups: %s"
 msgstr "已删除：%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Deleted role: %s"
-msgstr "已删除：%s"
+msgstr "已删除角色：%s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Deleted roles: %s"
-msgstr "已删除：%s"
+msgstr "已删除角色：%s"
 
 #, fuzzy, python-format
 msgid "Deleted user registration for user: %s"
@@ -5117,13 +5113,12 @@ msgstr "复制数据集"
 msgid "Duplicate folder name: %s"
 msgstr "文件夹名称重复：%s"
 
-#, fuzzy
 msgid "Duplicate role"
-msgstr "复制"
+msgstr "复制角色"
 
 #, python-format
 msgid "Duplicate role %(name)s"
-msgstr "角色名称重复：%(name)s"
+msgstr "复制角色 %(name)s"
 
 msgid "Duplicate tab"
 msgstr "复制选项卡"
@@ -5239,9 +5234,8 @@ msgstr "编辑日志"
 msgid "Edit Plugin"
 msgstr "编辑插件"
 
-#, fuzzy
 msgid "Edit Role"
-msgstr "编辑模式"
+msgstr "编辑角色"
 
 #, fuzzy
 msgid "Edit Rule"
@@ -5301,9 +5295,8 @@ msgstr "编辑属性"
 msgid "Edit report"
 msgstr "编辑报告"
 
-#, fuzzy
 msgid "Edit role"
-msgstr "编辑模式"
+msgstr "编辑角色"
 
 #, fuzzy
 msgid "Edit tag"
@@ -5359,9 +5352,8 @@ msgstr "重新加载"
 msgid "Elevation"
 msgstr "执行时间"
 
-#, fuzzy
 msgid "Email"
-msgstr "详细信息"
+msgstr "电子邮箱"
 
 #, fuzzy
 msgid "Email is required"
@@ -5638,9 +5630,9 @@ msgstr "错误"
 msgid "Error Fetching Tagged Objects"
 msgstr "获取标签对象错误"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting %s"
-msgstr "获取数据时出错：%s"
+msgstr "删除 %s 时出错"
 
 #, fuzzy
 msgid "Error executing query. "
@@ -6287,9 +6279,8 @@ msgstr "完成"
 msgid "First"
 msgstr "第一个值"
 
-#, fuzzy
 msgid "First Name"
-msgstr "图表名称"
+msgstr "名字"
 
 #, fuzzy
 msgid "First name"
@@ -6640,9 +6631,8 @@ msgstr "将其余数据归为“其他”"
 msgid "Grouping"
 msgstr "范围"
 
-#, fuzzy
 msgid "Groups"
-msgstr "分组"
+msgstr "用户组"
 
 msgid ""
 "Groups remaining series into an \"Others\" category when series limit is "
@@ -7207,9 +7197,8 @@ msgstr "反选"
 msgid "Invert current page"
 msgstr "反转当前页"
 
-#, fuzzy
 msgid "Is Active?"
-msgstr "激活邮件报告"
+msgstr "是否启用？"
 
 #, fuzzy
 msgid "Is active?"
@@ -8632,9 +8621,8 @@ msgstr "此查询没有返回任何结果。如果希望返回结果，请确保
 msgid "No roles"
 msgstr "还没有规则"
 
-#, fuzzy
 msgid "No roles yet"
-msgstr "还没有规则"
+msgstr "暂无角色"
 
 msgid "No rows were returned for this dataset"
 msgstr "这个数据集没有返回任何行"
@@ -9346,9 +9334,8 @@ msgstr "周期"
 msgid "Periods must be a whole number"
 msgstr "周期必须是整数值"
 
-#, fuzzy
 msgid "Permissions"
-msgstr "版本"
+msgstr "权限"
 
 #, python-format
 msgid "Permissions successfully synced for %s"
@@ -10341,13 +10328,11 @@ msgstr ""
 msgid "Role"
 msgstr "角色"
 
-#, fuzzy
 msgid "Role Name"
-msgstr "告警名称"
+msgstr "角色名称"
 
-#, fuzzy
 msgid "Role name is required"
-msgstr "需要名称"
+msgstr "请输入角色名称"
 
 msgid "Roles"
 msgstr "角色"
@@ -11135,9 +11120,8 @@ msgstr "默认选择首个过滤器值"
 msgid "Select format"
 msgstr "数值格式"
 
-#, fuzzy
 msgid "Select groups"
-msgstr "选择所有者"
+msgstr "选择用户组"
 
 msgid ""
 "Select layers in the order you want them stacked. First selected appears "
@@ -11267,9 +11251,8 @@ msgstr "选择GeoJSON列"
 msgid "Select the type of color scheme to use."
 msgstr "选择颜色方案"
 
-#, fuzzy
 msgid "Select users"
-msgstr "选择所有者"
+msgstr "选择用户"
 
 #, fuzzy
 msgid "Select values"
@@ -13103,17 +13086,14 @@ msgstr "后端存储的结果以不同的格式存储，而且不再可以反序
 msgid "The rich tooltip shows a list of all series for that point in time"
 msgstr "详细提示显示了该时间点的所有序列的列表。"
 
-#, fuzzy
 msgid "The role has been created successfully."
-msgstr "报告已创建"
+msgstr "角色已创建。"
 
-#, fuzzy
 msgid "The role has been duplicated successfully."
-msgstr "报告已创建"
+msgstr "角色已复制。"
 
-#, fuzzy
 msgid "The role has been updated successfully."
-msgstr "注释已更新。"
+msgstr "角色已更新。"
 
 msgid ""
 "The row limit set for the chart was reached. The chart may show partial "
@@ -13367,17 +13347,15 @@ msgstr "此组件没有足够的空间。请尝试减小其宽度，或增加目
 msgid "There was an error creating the group. Please, try again."
 msgstr "抱歉，这个看板在获取图表时发生错误："
 
-#, fuzzy
 msgid "There was an error creating the role. Please, try again."
-msgstr "抱歉，这个看板在获取图表时发生错误："
+msgstr "创建角色失败，请重试。"
 
 #, fuzzy
 msgid "There was an error creating the user. Please, try again."
 msgstr "抱歉，这个看板在获取图表时发生错误："
 
-#, fuzzy
 msgid "There was an error duplicating the role. Please, try again."
-msgstr "删除选定的数据集时出现问题：%s"
+msgstr "复制角色失败，请重试。"
 
 #, fuzzy
 msgid "There was an error fetching dataset"
@@ -13409,9 +13387,8 @@ msgstr "抱歉，这个看板在获取图表时发生错误："
 msgid "There was an error loading the tables"
 msgstr "您的请求有错误"
 
-#, fuzzy
 msgid "There was an error loading users."
-msgstr "您的请求有错误"
+msgstr "加载用户失败。"
 
 #, fuzzy
 msgid "There was an error retrieving dashboard tabs."
@@ -13425,9 +13402,8 @@ msgstr "获取此看板的收藏夹状态时出现问题: %s"
 msgid "There was an error updating the group. Please, try again."
 msgstr "抱歉，这个看板在获取图表时发生错误："
 
-#, fuzzy
 msgid "There was an error updating the role. Please, try again."
-msgstr "抱歉，这个看板在获取图表时发生错误："
+msgstr "更新角色失败，请重试。"
 
 #, fuzzy
 msgid "There was an error updating the user. Please, try again."
@@ -13573,9 +13549,8 @@ msgstr "此操作将永久删除图层。"
 msgid "This action will permanently delete the layer."
 msgstr "此操作将永久删除图层。"
 
-#, fuzzy
 msgid "This action will permanently delete the role."
-msgstr "此操作将永久删除图层。"
+msgstr "此操作将永久删除该角色。"
 
 msgid "This action will permanently delete the saved query."
 msgstr "此操作将永久删除保存的查询。"
@@ -14680,7 +14655,6 @@ msgstr "用于通过将多个统计信息分组在一起来汇总一组数据"
 msgid "User"
 msgstr "用户"
 
-#, fuzzy
 msgid "User Name"
 msgstr "用户名"
 
@@ -14724,9 +14698,8 @@ msgstr "需要名称"
 msgid "Username:"
 msgstr "用户名"
 
-#, fuzzy
 msgid "Users"
-msgstr "序列"
+msgstr "用户"
 
 #, fuzzy
 msgid "Users are not allowed to set a search path for security reasons."
@@ -17361,3 +17334,47 @@ msgstr "前一时间范围"
 #. Theme administration localization.
 msgid "Unknown tokens will be highlighted as warnings."
 msgstr "未知的主题变量将以警告高亮显示。"
+
+#. Reviewed local chart localization.
+msgid "%s / page"
+msgstr "%s/页"
+
+#. Reviewed local chart localization.
+msgid "/ page"
+msgstr "/页"
+
+#. Reviewed local chart localization.
+msgid "Next page"
+msgstr "下一页"
+
+#. Reviewed local chart localization.
+msgid "Previous page"
+msgstr "上一页"
+
+#. Reviewed local chart localization.
+msgid "Select permissions"
+msgstr "选择权限"
+
+#. Reviewed local chart localization.
+msgid "Some groups could not be resolved and are shown as IDs."
+msgstr "部分用户组名称无法加载，暂以 ID 显示。"
+
+#. Reviewed local chart localization.
+msgid "Some permissions could not be resolved and are shown as IDs."
+msgstr "部分权限名称无法加载，暂以 ID 显示。"
+
+#. Reviewed local chart localization.
+msgid "There was an error loading groups."
+msgstr "加载用户组失败。"
+
+#. Reviewed local chart localization.
+msgid "There was an error loading permissions."
+msgstr "加载权限失败。"
+
+#. Reviewed local chart localization.
+msgid "There was an error while fetching groups"
+msgstr "获取用户组失败"
+
+#. Reviewed local chart localization.
+msgid "There was an error while fetching permissions"
+msgstr "获取权限失败"

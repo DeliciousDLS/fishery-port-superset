@@ -31,7 +31,7 @@ import {
   useKeywordFilter,
   useGridHeight,
 } from './useGridResultTable';
-import { TableControls, ROW_LIMIT_OPTIONS } from './DataTableControls';
+import { TableControls, getRowLimitOptions } from './DataTableControls';
 import { SamplesPaneProps } from '../types';
 
 const Error = styled.pre`
@@ -151,7 +151,7 @@ export const SamplesPane = ({
           isLoading={isLoading}
           canDownload={canDownload}
           rowLimit={rowLimit}
-          rowLimitOptions={ROW_LIMIT_OPTIONS}
+          rowLimitOptions={getRowLimitOptions()}
           onRowLimitChange={handleRowLimitChange}
         />
         <Error>{responseError}</Error>
@@ -176,7 +176,7 @@ export const SamplesPane = ({
         isLoading={isLoading}
         canDownload={canDownload}
         rowLimit={rowLimit}
-        rowLimitOptions={ROW_LIMIT_OPTIONS}
+        rowLimitOptions={getRowLimitOptions()}
         onRowLimitChange={handleRowLimitChange}
       />
       <GridContainer>

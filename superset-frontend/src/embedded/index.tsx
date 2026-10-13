@@ -34,6 +34,7 @@ import Switchboard from '@superset-ui/switchboard';
 import getBootstrapData, { applicationRoot } from 'src/utils/getBootstrapData';
 import setupClient from 'src/setup/setupClient';
 import initPreamble from 'src/preamble';
+import { setupAGGridModules } from '@superset-ui/core/components/ThemedAgGridReact';
 import { useUiConfig } from 'src/components/UiConfigContext';
 import { store, USER_LOADED } from 'src/views/store';
 import { Loading } from '@superset-ui/core/components';
@@ -179,6 +180,7 @@ async function start() {
     ]);
   setupPlugins();
   setupCodeOverrides({ embedded: true });
+  setupAGGridModules();
   const getMeWithRole = makeApi<void, { result: UserWithPermissionsAndRoles }>({
     method: 'GET',
     endpoint: '/api/v1/me/roles/',

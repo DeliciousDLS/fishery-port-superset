@@ -38,7 +38,13 @@ const mockToasts = {
   addSuccessToast: jest.fn(),
 };
 
-jest.mock('./utils');
+jest.mock('./utils', () => ({
+  ...jest.requireActual('./utils'),
+  updateRoleName: jest.fn(),
+  updateRoleGroups: jest.fn(),
+  updateRolePermissions: jest.fn(),
+  updateRoleUsers: jest.fn(),
+}));
 const mockUpdateRoleName = jest.mocked(updateRoleName);
 const mockUpdateRoleGroups = jest.mocked(updateRoleGroups);
 const mockUpdateRolePermissions = jest.mocked(updateRolePermissions);
@@ -354,9 +360,9 @@ describe('RoleListEditModal', () => {
         const filters = query.filters as Array<{
           col: string;
           opr: string;
-          value: number[];
+          value: number;
         }>;
-        const ids = filters?.[0]?.value || [];
+        const ids = filters?.[0]?.value === roleA.id ? [10] : [30];
         const result = ids.map((id: number) => ({
           id,
           permission: { name: `perm_${id}` },
@@ -403,23 +409,27 @@ describe('RoleListEditModal', () => {
         c.endpoint.includes('/api/v1/security/permissions-resources/'),
       );
       expect(permCalls.length).toBeGreaterThan(0);
-      // Should request role B's IDs, not role A's
+      // The supported role relationship must use role B, not role A.
       const query = rison.decode(
         permCalls[0][0].endpoint.split('?q=')[1],
       ) as Record<string, unknown>;
       const filters = query.filters as Array<{
         col: string;
         opr: string;
-        value: number[];
+        value: number;
       }>;
-      expect(filters[0].value).toEqual(roleB.permission_ids);
+      expect(filters[0]).toEqual({
+        col: 'role',
+        opr: 'rel_m_m',
+        value: roleB.id,
+      });
     });
 
     unmount();
     mockGet.mockReset();
   });
 
-  test('fetches permissions and groups by id for hydration', async () => {
+  test('hydrates permissions through the supported role relationship filter', async () => {
     const mockGet = SupersetClient.get as jest.Mock;
     mockGet.mockResolvedValue({
       json: {
@@ -460,9 +470,9 @@ describe('RoleListEditModal', () => {
       page: 0,
       filters: [
         {
-          col: 'id',
-          opr: 'in',
-          value: mockRole.permission_ids,
+          col: 'role',
+          opr: 'rel_m_m',
+          value: mockRole.id,
         },
       ],
     });
@@ -479,4 +489,76 @@ describe('RoleListEditModal', () => {
       ],
     });
   });
+});
+
+test('resolves permission labels across pages without changing role assignments', async () => {
+  const getMock = jest.mocked(SupersetClient.get);
+  getMock.mockReset();
+  mockToasts.addDangerToast.mockClear();
+  getMock.mockImplementation(({ endpoint }) => {
+    if (endpoint.includes('/api/v1/security/permissions-resources/')) {
+      const query = rison.decode(endpoint.split('?q=')[1]) as {
+        page: number;
+        filters: Array<{ col: string; opr: string; value: number }>;
+      };
+      if (
+        query.filters[0].col !== 'role' ||
+        query.filters[0].opr !== 'rel_m_m'
+      ) {
+        return Promise.reject(
+          new Error('Filter column: id not allowed to filter'),
+        );
+      }
+      const result =
+        query.page === 0
+          ? Array.from({ length: 100 }, (_, i) => ({
+              id: i + 1,
+              permission: { name: 'can_read' },
+              view_menu: { name: `Resource${i + 1}` },
+            }))
+          : [
+              {
+                id: 101,
+                permission: { name: 'can_drill' },
+                view_menu: { name: 'Dashboard' },
+              },
+            ];
+      return Promise.resolve({ json: { count: 101, result } } as Awaited<
+        ReturnType<typeof SupersetClient.get>
+      >);
+    }
+    return Promise.resolve({ json: { count: 0, result: [] } } as Awaited<
+      ReturnType<typeof SupersetClient.get>
+    >);
+  });
+  render(
+    <RoleListEditModal
+      role={{
+        id: 6,
+        name: 'PortEmbeddedViewer',
+        permission_ids: Array.from({ length: 101 }, (_, i) => i + 1),
+        user_ids: [],
+        group_ids: [],
+      }}
+      show
+      onHide={jest.fn()}
+      onSave={jest.fn()}
+    />,
+  );
+  await waitFor(() => {
+    expect(screen.getByTestId('permissions-select')).toHaveTextContent(
+      'can read Resource1',
+    );
+    expect(mockToasts.addDangerToast).not.toHaveBeenCalled();
+  });
+  fireEvent.change(screen.getByTestId('role-name-input'), {
+    target: { value: 'RenamedViewer' },
+  });
+  fireEvent.click(screen.getByTestId('form-modal-save-button'));
+  await waitFor(() =>
+    expect(mockUpdateRolePermissions).toHaveBeenCalledWith(
+      6,
+      Array.from({ length: 101 }, (_, i) => i + 1),
+    ),
+  );
 });

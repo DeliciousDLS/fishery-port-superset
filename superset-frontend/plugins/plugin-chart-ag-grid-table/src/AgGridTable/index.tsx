@@ -573,7 +573,7 @@ const AgGridDataTable: FunctionComponent<AgGridTableProps> = memo(
             filters: t('Filters'),
             valueColumns: t('Value Columns'),
             pivotMode: t('Pivot Mode'),
-            groups: t('Groups'),
+            groups: t('Group by'),
             values: t('Values'),
             pivots: t('Pivots'),
             toolPanelButton: t('Tool Panel'),

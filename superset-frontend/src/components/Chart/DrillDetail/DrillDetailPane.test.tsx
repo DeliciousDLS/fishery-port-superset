@@ -17,6 +17,7 @@
  * under the License.
  */
 import fetchMock from 'fetch-mock';
+import userEvent from '@testing-library/user-event';
 import { QueryFormData, SupersetClient } from '@superset-ui/core';
 import { render, screen, waitFor } from 'spec/helpers/testing-library';
 import { getMockStoreWithNativeFilters } from 'spec/fixtures/mockStore';
@@ -233,4 +234,58 @@ test('should use verbose_map for column headers when available', async () => {
   expect(
     screen.queryByRole('columnheader', { name: 'na_sales' }),
   ).not.toBeInTheDocument();
+});
+
+test('changing page size resets the cache and requests consecutive pages at that size', async () => {
+  jest.restoreAllMocks();
+  setupDatasetEndpoint();
+  const requestedPages: { size: number; page: number }[] = [];
+  fetchMock.post(/\/datasource\/samples\?/, ({ url }) => {
+    const params = new URL(url, 'http://localhost').searchParams;
+    const size = Number(params.get('per_page'));
+    const page = Number(params.get('page'));
+    requestedPages.push({ size, page });
+    return {
+      result: {
+        total_count: 150,
+        data: Array.from(
+          { length: Math.min(size, 150 - (page - 1) * size) },
+          (_, index) => ({
+            entry: `record-${(page - 1) * size + index + 1}`,
+          }),
+        ),
+        colnames: ['entry'],
+        coltypes: [1],
+      },
+    };
+  });
+  setup();
+  await waitFor(() => expect(screen.getByText('record-1')).toBeInTheDocument());
+  await userEvent.click(screen.getByTitle('2'));
+  await waitFor(() =>
+    expect(screen.getByText('record-51')).toBeInTheDocument(),
+  );
+  await userEvent.click(screen.getByRole('combobox'));
+  await userEvent.click(
+    screen
+      .getAllByText('100 / page')
+      .find(element => element.closest('.ant-select-item-option-content'))!,
+  );
+  await waitFor(() => expect(screen.getByText('record-1')).toBeInTheDocument());
+  expect(
+    screen
+      .getAllByText('100 / page')
+      .find(element => element.closest('.ant-select-selection-item')),
+  ).toBeVisible();
+  expect(screen.getByTitle('1')).toHaveClass('ant-pagination-item-active');
+  await userEvent.click(screen.getByTitle('2'));
+  await waitFor(() =>
+    expect(screen.getByText('record-101')).toBeInTheDocument(),
+  );
+  expect(requestedPages).toEqual([
+    { size: 50, page: 1 },
+    { size: 50, page: 2 },
+    { size: 100, page: 1 },
+    { size: 100, page: 2 },
+  ]);
 });
