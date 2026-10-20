@@ -17378,3 +17378,27 @@ msgstr "获取用户组失败"
 #. Reviewed local chart localization.
 msgid "There was an error while fetching permissions"
 msgstr "获取权限失败"
+
+#: superset-frontend/src/components/Chart/DrillDetail
+msgid "Search column"
+msgstr "搜索字段"
+
+#: superset-frontend/src/components/Chart/DrillDetail
+msgid "Search detail records"
+msgstr "搜索当前钻取范围内的明细"
+
+#: superset-frontend/src/components/Chart/DrillDetail
+msgid "Export failed. Please try again."
+msgstr "导出失败，请重试。"
+
+#: superset-frontend/src/components/Chart/DrillDetail
+msgid "Export is limited to %s rows. Narrow your search to export all matches."
+msgstr "每次最多导出 %s 行，请缩小搜索范围后导出全部匹配记录。"
+
+#: superset-frontend/src/components/Chart/DrillDetail/DrillDetailTableControls.tsx
+msgid "Download as CSV"
+msgstr "导出 CSV"
+
+#: superset-frontend/src/components/Chart/DrillDetail/DrillDetailTableControls.tsx
+msgid "Download as Excel"
+msgstr "导出 Excel"

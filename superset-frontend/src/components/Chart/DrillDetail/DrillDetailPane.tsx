@@ -22,7 +22,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { useSelector } from 'react-redux';
@@ -40,7 +39,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import BooleanCell from '@superset-ui/core/components/Table/cell-renderers/BooleanCell';
 import NullCell from '@superset-ui/core/components/Table/cell-renderers/NullCell';
 import TimeCell from '@superset-ui/core/components/Table/cell-renderers/TimeCell';
-import { EmptyState, Loading } from '@superset-ui/core/components';
+import { Alert, EmptyState, Loading } from '@superset-ui/core/components';
 import { getDatasourceSamples } from 'src/components/Chart/chartAction';
 import Table, {
   ColumnsType,
@@ -49,10 +48,16 @@ import Table, {
 import { RootState } from 'src/dashboard/types';
 import HeaderWithRadioGroup from '@superset-ui/core/components/Table/header-renderers/HeaderWithRadioGroup';
 import { useDatasetMetadataBar } from 'src/features/datasets/metadataBar/useDatasetMetadataBar';
+import { findPermission } from 'src/utils/findPermission';
 import { Dataset } from '../types';
 import TableControls from './DrillDetailTableControls';
 import { getDrillPayload } from './utils';
 import { ResultsPage } from './types';
+import {
+  buildSearchFilter,
+  buildDrillExportPayload,
+  exportDrillDetail,
+} from './searchAndExport';
 
 const PAGE_SIZE = 50;
 
@@ -89,15 +94,20 @@ export default function DrillDetailPane({
   const theme = useTheme();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(PAGE_SIZE);
-  const currentPageSize = useRef(pageSize);
-  currentPageSize.current = pageSize;
-  const lastPageIndex = useRef(pageIndex);
   const [filters, setFilters] = useState(initialFilters);
+  const [searchColumn, setSearchColumn] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [searchFilter, setSearchFilter] =
+    useState<BinaryQueryObjectFilterClause>();
+  const [searchColumns, setSearchColumns] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [reloadVersion, setReloadVersion] = useState(0);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [responseError, setResponseError] = useState('');
-  const [resultsPages, setResultsPages] = useState<Map<number, ResultsPage>>(
-    new Map(),
-  );
+  const [resultsPage, setResultsPage] = useState<ResultsPage>();
   const [timeFormatting, setTimeFormatting] = useState<
     Record<string, TimeFormatting>
   >({});
@@ -106,9 +116,16 @@ export default function DrillDetailPane({
     ({ dashboardInfo }) => dashboardInfo.id,
   );
 
-  const SAMPLES_ROW_LIMIT = useSelector(
+  const exportRowLimit = useSelector(
     (state: { common: { conf: JsonObject } }) =>
-      state.common.conf.SAMPLES_ROW_LIMIT,
+      Number(state.common.conf.SQL_MAX_ROW) || 100000,
+  );
+  const canExport = useSelector((state: RootState) =>
+    findPermission('can_csv', 'Superset', state.user?.roles),
+  );
+  const effectiveFilters = useMemo(
+    () => [...filters, ...(searchFilter ? [searchFilter] : [])],
+    [filters, searchFilter],
   );
 
   // Extract datasource ID/type from string ID
@@ -120,17 +137,6 @@ export default function DrillDetailPane({
   const { metadataBar: metadataBarComponent } = useDatasetMetadataBar({
     dataset,
   });
-
-  // Get page of results
-  const resultsPage = useMemo(() => {
-    const nextResultsPage = resultsPages.get(pageIndex);
-    if (nextResultsPage) {
-      lastPageIndex.current = pageIndex;
-      return nextResultsPage;
-    }
-
-    return resultsPages.get(lastPageIndex.current);
-  }, [pageIndex, resultsPages]);
 
   const mappedColumns: ColumnsType<DataType> = useMemo(
     () =>
@@ -203,92 +209,145 @@ export default function DrillDetailPane({
     [resultsPage?.colNames, resultsPage?.data],
   );
 
-  // Clear cache on reload button click
-  const handleReload = useCallback(() => {
+  const resetResults = useCallback(() => {
     setResponseError('');
-    setResultsPages(new Map());
+    setExportError('');
+    setResultsPage(undefined);
     setPageIndex(0);
+    setReloadVersion(value => value + 1);
   }, []);
 
-  // Clear cache and reset page index if filters change
+  const handleReload = useCallback(() => resetResults(), [resetResults]);
+  const handleFilters = useCallback(
+    (nextFilters: BinaryQueryObjectFilterClause[]) => {
+      setFilters(nextFilters);
+      resetResults();
+    },
+    [resetResults],
+  );
+  const handleSearch = useCallback(() => {
+    setSearchFilter(buildSearchFilter(searchColumn, searchText));
+    resetResults();
+  }, [searchColumn, searchText, resetResults]);
+  const handleClearSearch = useCallback(() => {
+    setSearchText('');
+    setSearchFilter(undefined);
+    resetResults();
+  }, [resetResults]);
+  const handleSearchColumn = useCallback(
+    (column: string) => {
+      setSearchColumn(column);
+      setSearchText('');
+      setSearchFilter(undefined);
+      resetResults();
+    },
+    [resetResults],
+  );
+
+  // Cancel stale responses when paging, reloading, or changing filters.
   useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
     setResponseError('');
-    setResultsPages(new Map());
-    setPageIndex(0);
-  }, [filters]);
-
-  // Update cache order if page in cache
-  useEffect(() => {
-    if (
-      resultsPages.has(pageIndex) &&
-      [...resultsPages.keys()].at(-1) !== pageIndex
-    ) {
-      const nextResultsPages = new Map(resultsPages);
-      nextResultsPages.delete(pageIndex);
-      setResultsPages(
-        nextResultsPages.set(
-          pageIndex,
-          resultsPages.get(pageIndex) as ResultsPage,
-        ),
-      );
-    }
-  }, [pageIndex, resultsPages]);
-
-  // Download page of results & trim cache if page not in cache
-  useEffect(() => {
-    if (!responseError && !isLoading && !resultsPages.has(pageIndex)) {
-      setIsLoading(true);
-      const jsonPayload = getDrillPayload(formData, filters) ?? {};
-      const cachePageLimit = Math.ceil(SAMPLES_ROW_LIMIT / pageSize);
-      getDatasourceSamples(
-        datasourceType as DatasourceType,
-        Number(datasourceId),
-        false,
-        jsonPayload,
-        pageSize,
-        pageIndex + 1,
-        dashboardId,
-      )
-        .then(response => {
-          if (currentPageSize.current !== pageSize) return;
-          setResultsPages(
-            new Map([
-              ...[...resultsPages.entries()].slice(-cachePageLimit + 1),
-              [
-                pageIndex,
-                {
-                  total: response.total_count,
-                  data: response.data,
-                  colNames: ensureIsArray(response.colnames),
-                  colTypes: ensureIsArray(response.coltypes),
-                },
-              ],
-            ]),
-          );
-          setResponseError('');
-        })
-        .catch(error => {
-          if (currentPageSize.current !== pageSize) return;
-          setResponseError(`${error.name}: ${error.message}`);
-        })
-        .finally(() => {
-          setIsLoading(false);
+    getDatasourceSamples(
+      datasourceType as DatasourceType,
+      Number(datasourceId),
+      false,
+      getDrillPayload(formData, effectiveFilters) ?? {},
+      pageSize,
+      pageIndex + 1,
+      dashboardId,
+    )
+      .then(response => {
+        if (cancelled) return;
+        const colNames: string[] = ensureIsArray(response.colnames);
+        const colTypes: GenericDataType[] = ensureIsArray(response.coltypes);
+        setResultsPage({
+          total: response.total_count,
+          data: response.data,
+          colNames,
+          colTypes,
         });
-    }
+        // Keep searchable columns available after a query returns no matches.
+        if (colNames.length) {
+          const columns = colNames
+            .filter(
+              (column, index) => colTypes[index] === GenericDataType.String,
+            )
+            .map(column => ({
+              value: column,
+              label: dataset?.verbose_map?.[column] || column,
+            }));
+          setSearchColumns(columns);
+          setSearchColumn(current =>
+            columns.some(column => column.value === current)
+              ? current
+              : (columns.find(column => column.value === '车牌号')?.value ??
+                columns[0]?.value ??
+                ''),
+          );
+        }
+      })
+      .catch(error => {
+        if (!cancelled) setResponseError(`${error.name}: ${error.message}`);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [
-    SAMPLES_ROW_LIMIT,
     datasourceId,
     datasourceType,
-    filters,
+    effectiveFilters,
     formData,
-    isLoading,
     pageIndex,
     pageSize,
-    responseError,
-    resultsPages,
+    dashboardId,
+    reloadVersion,
+    dataset?.verbose_map,
   ]);
 
-  const bootstrapping = !responseError && !resultsPages.size;
+  const handleExport = useCallback(
+    async (format: 'csv' | 'xlsx') => {
+      if (!canExport || exporting || isLoading || !resultsPage?.total) return;
+      setExporting(true);
+      setExportError('');
+      try {
+        const payload = buildDrillExportPayload(
+          formData,
+          effectiveFilters,
+          format,
+          Math.min(resultsPage.total, exportRowLimit),
+          dashboardId,
+          dataset?.columns,
+        );
+        await exportDrillDetail(
+          payload,
+          `${dataset?.table_name || 'detail'}.${format}`,
+        );
+      } catch {
+        setExportError(t('Export failed. Please try again.'));
+      } finally {
+        setExporting(false);
+      }
+    },
+    [
+      canExport,
+      exporting,
+      isLoading,
+      resultsPage?.total,
+      formData,
+      effectiveFilters,
+      exportRowLimit,
+      dashboardId,
+      dataset?.table_name,
+      dataset?.columns,
+    ],
+  );
+
+  const bootstrapping = !responseError && !resultsPage;
 
   const allowHTML = formData.allow_render_html ?? true;
 
@@ -316,6 +375,7 @@ export default function DrillDetailPane({
     tableContent = (
       <Resizable>
         <Table
+          key={reloadVersion}
           data={data}
           columns={mappedColumns}
           size={TableSize.Small}
@@ -327,9 +387,7 @@ export default function DrillDetailPane({
             const nextPageSize = pagination.pageSize ?? pageSize;
             if (nextPageSize !== pageSize) {
               setPageSize(nextPageSize);
-              setResultsPages(new Map());
-              setResponseError('');
-              setPageIndex(0);
+              resetResults();
             } else {
               setPageIndex(pagination.current ? pagination.current - 1 : 0);
             }
@@ -344,16 +402,34 @@ export default function DrillDetailPane({
 
   return (
     <>
-      {!bootstrapping && metadataBarComponent}
-      {!bootstrapping && (
-        <TableControls
-          filters={filters}
-          setFilters={setFilters}
-          totalCount={resultsPage?.total}
-          loading={isLoading}
-          onReload={handleReload}
+      {metadataBarComponent}
+      <TableControls
+        filters={filters}
+        setFilters={handleFilters}
+        totalCount={resultsPage?.total}
+        loading={isLoading || bootstrapping}
+        onReload={handleReload}
+        searchColumns={searchColumns}
+        searchColumn={searchColumn}
+        searchText={searchText}
+        onSearchColumnChange={handleSearchColumn}
+        onSearchTextChange={setSearchText}
+        onSearch={handleSearch}
+        onClearSearch={handleClearSearch}
+        onExport={handleExport}
+        exporting={exporting}
+        canExport={canExport}
+      />
+      {canExport && (resultsPage?.total ?? 0) > exportRowLimit && (
+        <Alert
+          type="warning"
+          message={t(
+            'Export is limited to %s rows. Narrow your search to export all matches.',
+            exportRowLimit,
+          )}
         />
       )}
+      {exportError && <Alert type="error" message={exportError} />}
       {tableContent}
     </>
   );

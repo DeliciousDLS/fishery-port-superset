@@ -16,12 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { render, screen, userEvent } from 'spec/helpers/testing-library';
-import TableControls from './DrillDetailTableControls';
+import {
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+} from 'spec/helpers/testing-library';
+import TableControls, { TableControlsProps } from './DrillDetailTableControls';
 
 const setFilters = jest.fn();
 const onReload = jest.fn();
-const setup = (overrides: Record<string, any> = {}) => {
+const setup = (overrides: Partial<TableControlsProps> = {}) => {
   const props = {
     filters: [],
     setFilters,
@@ -32,6 +37,23 @@ const setup = (overrides: Record<string, any> = {}) => {
   };
   return render(<TableControls {...props} />);
 };
+
+const searchProps = {
+  searchColumns: [
+    { value: 'plate_number', label: 'Plate number' },
+    { value: 'port_name', label: 'Port' },
+  ],
+  searchColumn: 'plate_number',
+  searchText: 'PORT-001',
+  onSearch: jest.fn(),
+  onSearchTextChange: jest.fn(),
+  onSearchColumnChange: jest.fn(),
+  onClearSearch: jest.fn(),
+};
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 test('should render', () => {
   const { container } = setup();
   expect(container).toBeInTheDocument();
@@ -104,3 +126,112 @@ test('should remove the filters on close', () => {
   userEvent.click(screen.getByLabelText('Close'));
   expect(setFilters).toHaveBeenCalledWith([]);
 });
+
+test('should submit detail searches by button and Enter', () => {
+  setup(searchProps);
+
+  userEvent.click(screen.getByRole('button', { name: 'Search' }));
+  userEvent.type(
+    screen.getByRole('searchbox', { name: 'Search detail records' }),
+    '{enter}',
+  );
+
+  expect(searchProps.onSearch).toHaveBeenCalledTimes(2);
+});
+
+test('should pass the search text to its change handler', () => {
+  setup(searchProps);
+
+  fireEvent.change(
+    screen.getByRole('searchbox', { name: 'Search detail records' }),
+    {
+      target: { value: 'PORT-002' },
+    },
+  );
+
+  expect(searchProps.onSearchTextChange).toHaveBeenCalledWith('PORT-002');
+  expect(searchProps.onSearch).not.toHaveBeenCalled();
+});
+
+test('should update the selected search column', async () => {
+  setup(searchProps);
+
+  userEvent.click(screen.getByRole('combobox', { name: 'Search column' }));
+  userEvent.click(await screen.findByText('Port'));
+
+  expect(searchProps.onSearchColumnChange).toHaveBeenCalledWith('port_name');
+});
+
+test('should clear the applied search when the input is cleared', () => {
+  setup(searchProps);
+
+  userEvent.click(screen.getByRole('button', { name: 'close-circle' }));
+
+  expect(searchProps.onSearchTextChange).toHaveBeenCalledWith('');
+  expect(searchProps.onClearSearch).toHaveBeenCalledTimes(1);
+  expect(searchProps.onSearch).not.toHaveBeenCalled();
+});
+
+test('should clear the applied search when submitting an empty query', () => {
+  setup({ ...searchProps, searchText: '   ' });
+
+  userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+  expect(searchProps.onClearSearch).toHaveBeenCalledTimes(1);
+  expect(searchProps.onSearch).not.toHaveBeenCalled();
+});
+
+test('should export the requested file format', () => {
+  const onExport = jest.fn();
+  setup({ canExport: true, onExport, totalCount: 10 });
+
+  userEvent.click(screen.getByRole('button', { name: 'Download as CSV' }));
+  userEvent.click(screen.getByRole('button', { name: 'Download as Excel' }));
+
+  expect(onExport).toHaveBeenNthCalledWith(1, 'csv');
+  expect(onExport).toHaveBeenNthCalledWith(2, 'xlsx');
+});
+
+test('should hide exports when the user cannot export', () => {
+  setup({ canExport: false, onExport: jest.fn(), totalCount: 10 });
+
+  expect(
+    screen.queryByRole('button', { name: 'Download as CSV' }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', { name: 'Download as Excel' }),
+  ).not.toBeInTheDocument();
+});
+
+test.each([
+  { loading: true, totalCount: 10 },
+  { exporting: true, totalCount: 10 },
+  { totalCount: 0 },
+])('should disable exports when unavailable: %j', overrides => {
+  const onExport = jest.fn();
+  setup({ canExport: true, onExport, ...overrides });
+
+  expect(
+    screen.getByRole('button', { name: 'Download as CSV' }),
+  ).toBeDisabled();
+  expect(
+    screen.getByRole('button', { name: 'Download as Excel' }),
+  ).toBeDisabled();
+  userEvent.click(screen.getByRole('button', { name: 'Download as CSV' }));
+  expect(onExport).not.toHaveBeenCalled();
+});
+
+test.each([{ loading: true }, { exporting: true }])(
+  'should disable search controls while busy: %j',
+  overrides => {
+    setup({ ...searchProps, ...overrides });
+
+    expect(
+      screen.getByRole('combobox', { name: 'Search column' }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole('searchbox', { name: 'Search detail records' }),
+    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
+  },
+);

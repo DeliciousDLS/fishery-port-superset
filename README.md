@@ -1,10 +1,10 @@
 # Superset 中文定制核心源码
 
-基于 Apache Superset 6.1.0，包含图表控件、提示、日期格式、主题与角色管理、表格分页和中文语言包修复，以及嵌入表格显示、交互与后台会话共存修复。
+基于 Apache Superset 6.1.0，包含图表控件、提示、日期格式、主题与角色管理、表格分页和中文语言包修复，以及嵌入表格显示、交互与后台会话共存修复。钻取详情支持按文本字段搜索和 CSV/Excel 导出，保留原有筛选与导出权限校验。
 
 保留应用源码、前端插件、SDK、依赖与构建配置；不包含 AI/编辑器配置、本机部署目录、教学演示、运维报告、业务数据、账号或密钥。
 
-源码来源：Apache Superset 6.1.0（上游提交 c83fb2bb1dcfac41ac51bcebd82471f4a7180d18），定制源码版本 800cf4b8a63c7aa37f43b9f9ac5e3424a087f49a。本仓库使用单独的精简源码快照，Apache LICENSE.txt、NOTICE 和源码版权声明保留。
+源码来源：Apache Superset 6.1.0（上游提交 c83fb2bb1dcfac41ac51bcebd82471f4a7180d18），定制源码版本 efa8863425a8d56a061159ae44de5cef940a204e。本仓库使用单独的精简源码快照，Apache LICENSE.txt、NOTICE 和源码版权声明保留。
 
 主要目录：`superset/` 后端、`superset-frontend/` 前端与图表插件、`superset-core/` 核心库、`superset-embedded-sdk/` 嵌入 SDK、`superset-extensions-cli/` 扩展工具、`superset-websocket/` WebSocket 服务。`requirements/`、`docker/`、`scripts/` 为依赖与构建支持。
 

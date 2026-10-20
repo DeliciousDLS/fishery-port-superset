@@ -27,6 +27,7 @@ import {
 import { css, useTheme } from '@apache-superset/core/theme';
 import RowCountLabel from 'src/components/RowCountLabel';
 import { Icons } from '@superset-ui/core/components/Icons';
+import { Button, Input, Select } from '@superset-ui/core/components';
 
 export type TableControlsProps = {
   filters: BinaryQueryObjectFilterClause[];
@@ -34,6 +35,16 @@ export type TableControlsProps = {
   totalCount?: number;
   loading: boolean;
   onReload: () => void;
+  searchColumns?: { value: string; label: string }[];
+  searchColumn?: string;
+  searchText?: string;
+  onSearchColumnChange?: (column: string) => void;
+  onSearchTextChange?: (text: string) => void;
+  onSearch?: () => void;
+  onClearSearch?: () => void;
+  onExport?: (format: 'csv' | 'xlsx') => void;
+  exporting?: boolean;
+  canExport?: boolean;
 };
 
 export default function TableControls({
@@ -42,8 +53,19 @@ export default function TableControls({
   totalCount,
   loading,
   onReload,
+  searchColumns = [],
+  searchColumn,
+  searchText = '',
+  onSearchColumnChange,
+  onSearchTextChange,
+  onSearch,
+  onClearSearch,
+  onExport,
+  exporting = false,
+  canExport = false,
 }: TableControlsProps) {
   const theme = useTheme();
+  const busy = loading || exporting;
   const filterMap: Record<string, BinaryQueryObjectFilterClause> = useMemo(
     () =>
       Object.assign(
@@ -81,7 +103,10 @@ export default function TableControls({
     <div
       css={css`
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         justify-content: space-between;
+        gap: ${theme.sizeUnit * 2}px;
         padding: ${theme.sizeUnit / 2}px 0;
         margin-bottom: ${theme.sizeUnit * 2}px;
       `}
@@ -90,6 +115,7 @@ export default function TableControls({
         css={css`
           display: flex;
           flex-wrap: wrap;
+          flex-basis: 100%;
         `}
       >
         {filterTags.map(({ colName, val }, index) => (
@@ -113,13 +139,79 @@ export default function TableControls({
           </Tag>
         ))}
       </div>
+      {onSearch && searchColumns.length > 0 && (
+        <div
+          css={css`
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: ${theme.sizeUnit * 2}px;
+            flex: 1 1 320px;
+          `}
+        >
+          <Select
+            ariaLabel={t('Search column')}
+            value={searchColumn}
+            options={searchColumns}
+            disabled={busy}
+            onChange={value => {
+              if (typeof value === 'string') {
+                onSearchColumnChange?.(value);
+              }
+            }}
+            css={css`
+              min-width: 160px;
+              flex: 1 1 160px;
+            `}
+          />
+          <Input.Search
+            aria-label={t('Search detail records')}
+            placeholder={t('Search detail records')}
+            value={searchText}
+            allowClear
+            enterButton={t('Search')}
+            disabled={busy}
+            onChange={event => onSearchTextChange?.(event.target.value)}
+            onSearch={value => {
+              if (value.trim()) {
+                onSearch();
+              } else {
+                onClearSearch?.();
+              }
+            }}
+            css={css`
+              min-width: 200px;
+              flex: 2 1 240px;
+            `}
+          />
+        </div>
+      )}
       <div
         css={css`
           display: flex;
+          flex-wrap: wrap;
           align-items: center;
+          gap: ${theme.sizeUnit * 2}px;
           height: min-content;
+          margin-left: auto;
         `}
       >
+        {canExport && onExport && (
+          <>
+            <Button
+              disabled={busy || totalCount === 0}
+              onClick={() => onExport('csv')}
+            >
+              {t('Download as CSV')}
+            </Button>
+            <Button
+              disabled={busy || totalCount === 0}
+              onClick={() => onExport('xlsx')}
+            >
+              {t('Download as Excel')}
+            </Button>
+          </>
+        )}
         <RowCountLabel loading={loading && !totalCount} rowcount={totalCount} />
         <Icons.ReloadOutlined
           iconColor={theme.colorIcon}
